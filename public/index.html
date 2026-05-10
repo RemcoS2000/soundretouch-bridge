@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SoundRetouch Bridge</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body>
+        <main class="layout">
+            <header class="hero">
+                <div>
+                    <h1>SoundRetouch Bridge</h1>
+                </div>
+            </header>
+
+            <section class="panel">
+                <h2>Dashboard</h2>
+                <div id="status-grid" class="status-grid"></div>
+            </section>
+
+            <section class="panel">
+                <div class="section-header">
+                    <h2>Speakers</h2>
+                    <div class="actions">
+                        <button id="discover-speakers" type="button">Refresh discovery</button>
+                    </div>
+                </div>
+
+                <div id="speakers-list" class="stack"></div>
+
+                <div class="section-divider" aria-hidden="true"></div>
+
+                <form id="manual-speaker-form" class="inline-form inline-form-spaced">
+                    <label>
+                        <span>Manual speaker IP</span>
+                        <input id="manual-speaker-ip" name="ip" placeholder="192.168.1.209" required />
+                    </label>
+                    <button type="submit">Add speaker</button>
+                </form>
+            </section>
+
+            <section class="panel">
+                <h2>Debug</h2>
+                <div class="debug-stack">
+                    <div class="debug-block">
+                        <h3>Recent logs</h3>
+                        <div id="logs-list" class="terminal-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div id="mapping-modal" class="modal" aria-hidden="true">
+            <div class="modal-backdrop" data-close-modal="true"></div>
+            <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="mapping-modal-title">
+                <div class="modal-header">
+                    <h2 id="mapping-modal-title">Configure preset</h2>
+                    <button id="mapping-modal-close" type="button" class="secondary">Close</button>
+                </div>
+                <form id="mapping-form" class="mapping-form modal-form">
+                    <input id="mapping-id" name="id" type="hidden" />
+                    <label class="context-field">
+                        <span>Speaker</span>
+                        <div id="mapping-speaker-display" class="modal-readonly"></div>
+                        <input id="mapping-speaker" name="speakerId" type="hidden" />
+                    </label>
+                    <label class="context-field">
+                        <span>Preset number</span>
+                        <div id="mapping-preset-display" class="modal-readonly"></div>
+                        <input id="mapping-preset" name="presetNumber" type="hidden" />
+                    </label>
+                    <label class="full-width-field">
+                        <span>Station name</span>
+                        <input id="mapping-station" name="stationName" required />
+                    </label>
+                    <label class="full-width-field">
+                        <span>Stream URL</span>
+                        <input id="mapping-stream" name="streamUrl" placeholder="http://icecast.omroep.nl/radio2-bb-mp3" required />
+                    </label>
+                    <label class="checkbox-label full-width-field">
+                        <input id="mapping-enabled" name="enabled" type="checkbox" checked />
+                        <span>Enabled</span>
+                    </label>
+                    <div class="actions modal-actions">
+                        <div class="actions modal-actions-group">
+                            <button id="mapping-delete" type="button" class="danger">Delete</button>
+                        </div>
+                        <button type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <template id="speaker-template">
+            <article class="card">
+                <div class="card-header">
+                    <div>
+                        <h3 class="speaker-name"></h3>
+                        <p class="speaker-meta"></p>
+                    </div>
+                    <div class="speaker-presets" aria-label="Preset mapping status"></div>
+                </div>
+            </article>
+        </template>
+
+        <script src="/app.js" defer></script>
+    </body>
+</html>
