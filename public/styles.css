@@ -25,15 +25,40 @@
 }
 
 html {
-    background: var(--bg);
+    background: transparent;
 }
 
 body {
     margin: 0;
-    background: var(--bg);
+    position: relative;
+    min-height: 100vh;
+    isolation: isolate;
+    background: transparent;
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body::before {
+    z-index: -2;
+    background: url('/default-home-background.jpg') center center / cover no-repeat;
+    filter: blur(36px);
+    transform: scale(1.08);
+    opacity: 0.84;
+}
+
+body::after {
+    z-index: -1;
+    background: rgba(255, 255, 255, 0.54);
 }
 
 button,
