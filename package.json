@@ -12,7 +12,7 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "lint": "eslint . --ext .ts",
-        "start": "node dist/index.js",
+        "start": "tsx dist/index.js",
         "typecheck": "tsc --noEmit -p tsconfig.json"
     },
     "dependencies": {
