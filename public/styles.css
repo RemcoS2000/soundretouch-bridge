@@ -416,8 +416,30 @@ label span {
 }
 
 .speaker-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 8px;
     margin-top: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(96px, max-content));
+}
+
+.speaker-remove {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    line-height: 1;
+    flex: 0 0 auto;
+}
+
+.speaker-remove svg {
+    width: 16px;
+    height: 16px;
+    display: block;
 }
 
 .modal {

@@ -137,6 +137,11 @@ function renderSpeakers() {
             })
         })
 
+        const removeButton = fragment.querySelector('.speaker-remove')
+        removeButton.addEventListener('click', function () {
+            removeSpeaker(speaker)
+        })
+
         els.speakersList.appendChild(fragment)
     })
 }
@@ -163,6 +168,26 @@ async function deleteMapping(id) {
 
     try {
         await api('/api/mappings/' + encodeURIComponent(id), { method: 'DELETE' })
+        await refreshAll()
+    } catch (error) {
+        alert(error.message || error)
+    }
+}
+
+async function removeSpeaker(speaker) {
+    const message =
+        speaker.origin === 'manual'
+            ? 'Remove this manual speaker?'
+            : 'Remove this discovered speaker?'
+
+    if (!window.confirm(message)) {
+        return
+    }
+
+    try {
+        await api('/api/speakers/' + encodeURIComponent(speaker.id), {
+            method: 'DELETE',
+        })
         await refreshAll()
     } catch (error) {
         alert(error.message || error)

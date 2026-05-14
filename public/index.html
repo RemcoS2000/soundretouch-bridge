@@ -23,7 +23,7 @@
                 <div class="section-header">
                     <h2>Speakers</h2>
                     <div class="actions">
-                        <button id="discover-speakers" type="button">Refresh discovery</button>
+                        <button id="discover-speakers" type="button" class="secondary" aria-label="Refresh discovery" title="Refresh discovery">↻</button>
                     </div>
                 </div>
 
@@ -99,7 +99,17 @@
                         <h3 class="speaker-name"></h3>
                         <p class="speaker-meta"></p>
                     </div>
-                    <div class="speaker-presets" aria-label="Preset mapping status"></div>
+                    <div class="speaker-actions">
+                        <div class="speaker-presets" aria-label="Preset mapping status"></div>
+                        <button type="button" class="danger speaker-remove" aria-label="Remove speaker" title="Remove speaker">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path
+                                    fill="currentColor"
+                                    d="M9 3.75A1.75 1.75 0 0 1 10.75 2h2.5A1.75 1.75 0 0 1 15 3.75V5h4a1 1 0 0 1 0 2h-1.06l-.7 10.13A2.75 2.75 0 0 1 14.5 20H9.5a2.75 2.75 0 0 1-2.74-2.87L6.06 7H5a1 1 0 1 1 0-2h4V3.75Zm1.75-.25v1.5h2.5v-1.5h-2.5Zm-2.6 3.5.61 9.84c.03.42.38.76.8.76h5.88c.42 0 .77-.34.8-.76l.61-9.84H8.15Zm2.1 2.25a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5a.75.75 0 0 1 .75-.75Zm4 0a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5a.75.75 0 0 1 .75-.75Z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </article>
         </template>

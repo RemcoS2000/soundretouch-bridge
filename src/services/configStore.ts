@@ -50,6 +50,13 @@ export class ConfigStore {
         await this.persist()
     }
 
+    async removeSpeaker(id: string): Promise<void> {
+        this.config.manualSpeakers = this.config.manualSpeakers.filter((speaker) => speaker.id !== id)
+        this.config.discoveredSpeakers = this.config.discoveredSpeakers.filter((speaker) => speaker.id !== id)
+        this.config.mappings = this.config.mappings.filter((mapping) => mapping.speakerId !== id)
+        await this.persist()
+    }
+
     async setMappings(mappings: MappingRecord[]): Promise<void> {
         this.config.mappings = mappings
         await this.persist()

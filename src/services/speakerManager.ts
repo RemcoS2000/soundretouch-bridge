@@ -110,6 +110,37 @@ export class SpeakerManager {
     }
 
     /**
+     * Removes a speaker and any mappings that reference it.
+     *
+     * @param id Speaker identifier.
+     */
+    async removeSpeaker(id: string): Promise<void> {
+        const speaker = this.speakerMap.get(id)
+        if (!speaker) {
+            throw new Error('Speaker not found')
+        }
+
+        const unsubscribers = this.listenerMap.get(id)
+        if (unsubscribers) {
+            for (const unsubscribe of unsubscribers) {
+                unsubscribe()
+            }
+            this.listenerMap.delete(id)
+        }
+
+        this.deviceMap.delete(id)
+        await this.configStore.removeSpeaker(id)
+        this.rebuildSpeakerMap()
+
+        this.logger.info('speaker removed', {
+            speakerId: speaker.id,
+            name: speaker.name,
+            ip: speaker.ip,
+            origin: speaker.origin,
+        })
+    }
+
+    /**
      * Creates or replaces a preset mapping.
      *
      * @param input Mapping payload from the UI.

@@ -25,6 +25,10 @@ export function buildServer(manager: SpeakerManager) {
         }
         return { speaker: await manager.addManualSpeaker(body.ip) }
     })
+    server.delete('/api/speakers/:id', async (request) => {
+        await manager.removeSpeaker((request.params as { id: string }).id)
+        return { ok: true }
+    })
 
     server.get('/api/mappings', async () => manager.listMappings())
     server.post('/api/mappings', async (request) => manager.createMapping(request.body as never))
