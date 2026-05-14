@@ -1,9 +1,13 @@
 import path from 'node:path'
 
+import WebSocket from 'ws'
+
 import { buildServer } from './server.js'
 import { ConfigStore } from './services/configStore.js'
 import { Logger } from './services/logger.js'
 import { SpeakerManager } from './services/speakerManager.js'
+
+globalThis.WebSocket ??= WebSocket as unknown as typeof globalThis.WebSocket
 
 const PORT = Number.parseInt(process.env.PORT ?? '4100', 10)
 const HOST = process.env.HOST ?? '0.0.0.0'
