@@ -211,7 +211,7 @@ export class SpeakerManager {
             throw new Error('Mapping not found')
         }
 
-        return this.playStreamForMapping(mapping, 'manual-play')
+        return this.playStreamForMapping(mapping)
     }
 
     /**
@@ -427,19 +427,15 @@ export class SpeakerManager {
             stationName: mapping.stationName,
         })
 
-        await this.playStreamForMapping(mapping, 'preset-event')
+        await this.playStreamForMapping(mapping)
     }
 
     /**
      * Plays a stream URL on the target speaker.
      *
      * @param mapping Mapping that owns the stream URL.
-     * @param trigger Reason the playback was started.
      */
-    private async playStreamForMapping(
-        mapping: MappingRecord,
-        trigger: 'preset-event' | 'manual-play'
-    ): Promise<{ mapping: MappingRecord; ip: string }> {
+    private async playStreamForMapping(mapping: MappingRecord): Promise<{ mapping: MappingRecord; ip: string }> {
         const speaker = this.getSpeakerOrThrow(mapping.speakerId)
         const ip = speaker.ip
         const device = this.getDeviceForSpeaker(speaker)
@@ -449,16 +445,16 @@ export class SpeakerManager {
             speakerId: speaker.id,
             ip,
             streamUrl: mapping.streamUrl,
-            trigger,
         })
 
+        await device.keyPressAndRelease('STOP')
+        await new Promise((resolve) => setTimeout(resolve, 300))
         await device.playStreamUrl(mapping.streamUrl)
 
         this.logger.info('stream playback completed', {
             mappingId: mapping.id,
             speakerId: speaker.id,
             ip,
-            trigger,
         })
 
         return {
@@ -474,7 +470,7 @@ export class SpeakerManager {
      */
     private getDeviceForSpeaker(speaker: SpeakerRecord): SoundTouchDevice {
         const existing = this.deviceMap.get(speaker.id)
-        if (existing && existing.host === speaker.ip) {
+        if (existing?.host === speaker.ip) {
             return existing
         }
 
