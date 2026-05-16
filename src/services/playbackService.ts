@@ -1,8 +1,7 @@
 import { type Preset, SoundTouchDevice } from '@soundretouch/api/device'
 
-import type { MappingRecord, SpeakerRecord } from '../types'
-
 import { Logger } from '../shared/logger'
+import type { MappingRecord, SpeakerRecord } from '../types'
 
 const RECONNECT_DELAY_MS = 5000
 
@@ -33,24 +32,18 @@ export class PlaybackService {
      * @param onPresetSelection - Callback invoked when the speaker reports a preset change.
      * @param forceReconnect - Whether to replace existing listeners.
      */
-    attachSpeaker(
-        speaker: SpeakerRecord,
-        onPresetSelection: (speakerId: string, preset: Preset) => Promise<void>,
-        forceReconnect = false
-    ): void {
+    attachSpeaker(speaker: SpeakerRecord, onPresetSelection: (speakerId: string, preset: Preset) => Promise<void>, forceReconnect = false): void {
         const existing = this.listenerMap.get(speaker.id)
         if (existing && !forceReconnect) {
             return
         }
 
         if (existing) {
-            for (const unsubscribe of existing) {
-                unsubscribe()
-            }
-            this.listenerMap.delete(speaker.id)
+            this.detachSpeaker(speaker.id)
         }
 
         const device = this.getDeviceForSpeaker(speaker)
+        let reconnecting = false
         const unsubscribers = [
             device.onNowSelectionUpdated((preset: Preset) => {
                 void onPresetSelection(speaker.id, preset).catch((error) => {
@@ -66,6 +59,15 @@ export class PlaybackService {
                     ip: speaker.ip,
                     error: this.toErrorMessage(error),
                 })
+
+                // Attempt to reconnect on error
+                if (reconnecting) {
+                    return
+                }
+
+                reconnecting = true
+                this.detachSpeaker(speaker.id)
+                this.attachSpeaker(speaker, onPresetSelection, true)
             }),
         ]
 
@@ -137,7 +139,6 @@ export class PlaybackService {
                 unsubscribe()
             }
         }
-
         this.listenerMap.clear()
         this.deviceMap.clear()
     }
