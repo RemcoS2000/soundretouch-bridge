@@ -29,6 +29,7 @@ export interface LogEntry {
     id: string
     timestamp: string
     level: 'info' | 'warn' | 'error'
+    service?: string
     message: string
     context?: Record<string, unknown>
 }

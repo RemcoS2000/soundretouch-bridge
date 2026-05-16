@@ -2,10 +2,10 @@ import path from 'node:path'
 
 import WebSocket from 'ws'
 
-import { buildServer } from './server.js'
-import { ConfigStore } from './services/configStore.js'
-import { Logger } from './services/logger.js'
-import { SpeakerManager } from './services/speakerManager.js'
+import { buildServer } from './server'
+import { SoundRetouchBridge } from './services/soundRetouchBridge'
+import { ConfigStore } from './shared/configStore'
+import { Logger } from './shared/logger'
 
 globalThis.WebSocket ??= WebSocket as unknown as typeof globalThis.WebSocket
 
@@ -13,12 +13,12 @@ const PORT = Number.parseInt(process.env.PORT ?? '4100', 10)
 const HOST = process.env.HOST ?? '0.0.0.0'
 
 async function main(): Promise<void> {
-    const logger = new Logger()
+    const logger = new Logger('BridgeApp')
     const configPath = path.join(process.cwd(), 'data', 'config.json')
     const configStore = new ConfigStore(configPath)
     await configStore.load()
 
-    const manager = new SpeakerManager(configStore, logger)
+    const manager = new SoundRetouchBridge(configStore, logger)
     await manager.init()
     void manager.discoverSpeakers().catch((error) => {
         logger.warn('startup discovery failed', {

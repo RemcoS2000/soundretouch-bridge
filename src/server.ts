@@ -4,9 +4,9 @@ import path from 'node:path'
 
 import Fastify from 'fastify'
 
-import { SpeakerManager } from './services/speakerManager.js'
+import { SoundRetouchBridge } from './services/soundRetouchBridge'
 
-export function buildServer(manager: SpeakerManager) {
+export function buildServer(manager: SoundRetouchBridge) {
     const server = Fastify({ logger: false })
 
     void server.register(fastifyStatic, {
